@@ -196,6 +196,7 @@ if __name__ == '__main__':
         train_round = int(tr100_len / b)
         test_round = int(te100_len / b)
         train_yu = int(tr100_len % b)
+        test_yu = int(te100_len % b)
         best_acc = 0
         best_acc_1 = 0
         best_acc_9 = 0
@@ -421,38 +422,38 @@ if __name__ == '__main__':
         print('start meta')
         optimizer_learner = optim.Adam(model.parameters(), lr=args.lr_learner)
         model.train()
-        for i in range(train_round + 1):
+        for i in range(test_round + 1):
             print(i)
             model.load_state_dict(torch.load(args.model_pth))
-            if (i == train_round):
+            if (i == test_round):
                 logits, image_all, audio_all, text_all, video_all, deco_image, deco_audio, deco_text, deco_video, x,\
                 image_all_9, audio_all_9, text_all_9, video_all_9, deco_image_9, deco_audio_9, deco_text_9, deco_video_9, x_9, logits_1, logits_9,final_x = model(
-                    feature_image_train_100_mask[i * b:tr100_len], feature_audio_train_100_mask[i * b:tr100_len], feature_text_train_100_mask[i * b:tr100_len],
-                    feature_video_train_100_mask[i * b:tr100_len],
-                    feature_image_train_100_mask_9[i * b:tr100_len], feature_audio_train_100_mask_9[i * b:tr100_len], feature_text_train_100_mask_9[i * b:tr100_len],
-                    feature_video_train_100_mask_9[i * b:tr100_len], mask_train_100[:, i * b:tr100_len], mask_train_100_re[:, i * b:tr100_len])
+                    feature_image_test_100_mask[i * b:te100_len], feature_audio_test_100_mask[i * b:te100_len], feature_text_test_100_mask[i * b:te100_len],
+                    feature_video_test_100_mask[i * b:te100_len],
+                    feature_image_test_100_mask_9[i * b:te100_len], feature_audio_test_100_mask_9[i * b:te100_len], feature_text_test_100_mask_9[i * b:te100_len],
+                    feature_video_test_100_mask_9[i * b:te100_len], mask_test_100[:, i * b:te100_len], mask_test_100_re[:, i * b:te100_len])
 
-                loss_cls = loss_function(logits, label_train_100[i * b:tr100_len])+loss_function(logits_1, label_train_100[i * b:tr100_len])+loss_function(logits_9, label_train_100[i * b:tr100_len])
+                loss_cls = loss_function(logits, label_test_100[i * b:te100_len])+loss_function(logits_1, label_test_100[i * b:te100_len])+loss_function(logits_9, label_test_100[i * b:te100_len])
 
-                loss_reconstuction = (Loss_re1(deco_image, image_all, mask_train_100[0, i * b:tr100_len]) + Loss_re1(deco_audio, audio_all, mask_train_100[1, i * b:tr100_len]) + \
-                                      Loss_re1(deco_text, text_all, mask_train_100[2, i * b:tr100_len]) + Loss_re1(deco_video, video_all, mask_train_100[3, i * b:tr100_len])+ \
-                                      Loss_re1(deco_image_9, image_all_9, mask_train_100[0, i * b:tr100_len]) + Loss_re1(deco_audio_9, audio_all_9,mask_train_100[1, i * b:tr100_len])+ \
-                                      Loss_re1(deco_text_9, text_all_9, mask_train_100[2, i * b:tr100_len]) + Loss_re1(deco_video_9, video_all_9, mask_train_100[3, i * b:tr100_len])
-                                      ) / 2048 / train_yu
+                loss_reconstuction = (Loss_re1(deco_image, image_all, mask_test_100[0, i * b:te100_len]) + Loss_re1(deco_audio, audio_all, mask_test_100[1, i * b:te100_len]) + \
+                                      Loss_re1(deco_text, text_all, mask_test_100[2, i * b:te100_len]) + Loss_re1(deco_video, video_all, mask_test_100[3, i * b:te100_len])+ \
+                                      Loss_re1(deco_image_9, image_all_9, mask_test_100[0, i * b:te100_len]) + Loss_re1(deco_audio_9, audio_all_9,mask_test_100[1, i * b:te100_len])+ \
+                                      Loss_re1(deco_text_9, text_all_9, mask_test_100[2, i * b:te100_len]) + Loss_re1(deco_video_9, video_all_9, mask_test_100[3, i * b:te100_len])
+                                      ) / 2048 / test_yu
                 loss = loss_cls + loss_reconstuction
             else:
                 logits, image_all, audio_all, text_all, video_all, deco_image, deco_audio, deco_text, deco_video, x, \
                 image_all_9, audio_all_9, text_all_9, video_all_9, deco_image_9, deco_audio_9, deco_text_9, deco_video_9, x_9, logits_1, logits_9,final_x = model(
-                    feature_image_train_100_mask[i * b:(i + 1) * b], feature_audio_train_100_mask[i * b:(i + 1) * b], feature_text_train_100_mask[i * b:(i + 1) * b],
-                    feature_video_train_100_mask[i * b:(i + 1) * b],
-                    feature_image_train_100_mask_9[i * b:(i + 1) * b], feature_audio_train_100_mask_9[i * b:(i + 1) * b], feature_text_train_100_mask_9[i * b:(i + 1) * b],
-                    feature_video_train_100_mask_9[i * b:(i + 1) * b],mask_train_100[:, i * b:(i + 1) * b], mask_train_100_re[:, i * b:(i + 1) * b])
+                    feature_image_test_100_mask[i * b:(i + 1) * b], feature_audio_test_100_mask[i * b:(i + 1) * b], feature_text_test_100_mask[i * b:(i + 1) * b],
+                    feature_video_test_100_mask[i * b:(i + 1) * b],
+                    feature_image_test_100_mask_9[i * b:(i + 1) * b], feature_audio_test_100_mask_9[i * b:(i + 1) * b], feature_text_test_100_mask_9[i * b:(i + 1) * b],
+                    feature_video_test_100_mask_9[i * b:(i + 1) * b],mask_test_100[:, i * b:(i + 1) * b], mask_test_100_re[:, i * b:(i + 1) * b])
 
-                loss_cls = loss_function(logits, label_train_100[i * b:(i + 1) * b])+loss_function(logits_1, label_train_100[i * b:(i + 1) * b])+loss_function(logits_9, label_train_100[i * b:(i + 1) * b])
-                loss_reconstuction = (Loss_re1(deco_image, image_all, mask_train_100[0, i * b:(i + 1) * b]) + Loss_re1(deco_audio, audio_all, mask_train_100[1, i * b:(i + 1) * b]) + \
-                                      Loss_re1(deco_text, text_all, mask_train_100[2, i * b:(i + 1) * b]) + Loss_re1(deco_video, video_all,mask_train_100[3, i * b:(i + 1) * b])+ \
-                                      Loss_re1(deco_image_9, image_all_9, mask_train_100[0, i * b:(i + 1) * b]) + Loss_re1(deco_audio_9, audio_all_9,mask_train_100[1, i * b:(i + 1) * b]) + \
-                                      Loss_re1(deco_text_9, text_all_9, mask_train_100[2, i * b:(i + 1) * b]) + Loss_re1(deco_video_9, video_all_9,mask_train_100[3, i * b:(i + 1) * b])
+                loss_cls = loss_function(logits, label_test_100[i * b:(i + 1) * b])+loss_function(logits_1, label_test_100[i * b:(i + 1) * b])+loss_function(logits_9, label_train_100[i * b:(i + 1) * b])
+                loss_reconstuction = (Loss_re1(deco_image, image_all, mask_test_100[0, i * b:(i + 1) * b]) + Loss_re1(deco_audio, audio_all, mask_test_100[1, i * b:(i + 1) * b]) + \
+                                      Loss_re1(deco_text, text_all, mask_test_100[2, i * b:(i + 1) * b]) + Loss_re1(deco_video, video_all,mask_test_100[3, i * b:(i + 1) * b])+ \
+                                      Loss_re1(deco_image_9, image_all_9, mask_test_100[0, i * b:(i + 1) * b]) + Loss_re1(deco_audio_9, audio_all_9,mask_test_100[1, i * b:(i + 1) * b]) + \
+                                      Loss_re1(deco_text_9, text_all_9, mask_test_100[2, i * b:(i + 1) * b]) + Loss_re1(deco_video_9, video_all_9,mask_test_100[3, i * b:(i + 1) * b])
                                       ) / 2048 / b
                 loss = loss_cls + loss_reconstuction
 
