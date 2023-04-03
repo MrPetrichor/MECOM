@@ -461,5 +461,5 @@ class MECOM(nn.Module):
         logits_1 = self.fc_2048_100_1(full_x)
         logits_9 = self.fc_2048_100_9(full_x_9)
 
-        return logits, image_all, audio_all, text_all, video_all, deco_image, deco_audio, deco_text, deco_video, full_x, image_all_9, audio_all_9, text_all_9, video_all_9, \
-            deco_image_9, deco_audio_9, deco_text_9, deco_video_9, full_x_9,logits_1,logits_9,final_x
+        return logits, image_all, audio_all, text_all, video_all, deco_image, deco_audio, deco_text, deco_video, x, image_all_9, audio_all_9, text_all_9, video_all_9, \
+            deco_image_9, deco_audio_9, deco_text_9, deco_video_9, x_9,logits_1,logits_9,final_x
