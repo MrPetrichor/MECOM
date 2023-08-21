@@ -14,15 +14,15 @@ timm
 
 ## Preparing the datasets
 
-We provide three datasets in this repo: UPMC Food-101, PKU FG-XMedia, RGB-D. The first half of each dataset categorys are divided into meta train sets and others are divided into meta test sets.
+We provide three datasets in this repo: [UPMC Food-101](http://visiir.lip6.fr/explore), [PKU FG-XMedia](http://59.108.48.34/tiki/FGCrossNet/), [RGB-D](https://rgbd-dataset.cs.washington.edu/). The first half of each dataset categorys are divided into meta train sets and others are divided into meta test sets.
 
 The detailed information of these datasets are shown as follows:
 
 | CATEGORY    | UPMC Food-101 | PKU FG-XMedia | RGB-D |
 |-------------|---------------|---------------|-------|
 | Total       | 101           | 200           | 51    |
-| In Dmeta_tr | 50            | 100           | 25    |
-| In Dmeta_te | 51            | 100           | 26    |
+| In ${D}_{meta\\_tr}$ | 50            | 100           | 25    |
+| In ${D}_{meta\\_te}$ | 51            | 100           | 26    |
 
 As mentioned in MECOM, we use different methods to preprocess each modality data and store them in "pth" format. For example, in PKU FG-XMedia meta test set, there are 2930 images and they would be stroe as "PKU_image_test.pth" which is a tensor with size of (2930,2048).
 
